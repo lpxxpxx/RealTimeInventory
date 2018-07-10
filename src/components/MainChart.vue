@@ -5,7 +5,7 @@
       <apartmen-chart></apartmen-chart>
     </div>
     <div class="wareage" v-show="type===1">
-      <data-count-age v-bind:type="type"></data-count-age>
+      <data-count-age-chart></data-count-age-chart>
       <apartmenAge></apartmenAge>
     </div>
   </div>
@@ -24,7 +24,7 @@
 import HeaderSelf from './Header';
 import DataCountChart from './DataCountChart';
 import ApartmenChart from './ApartmenChart';
-import DataCountAge from './DatacountAge';
+import DataCountAgeChart from './DataCountAgeChart';
 import ApartmenAge from './ApartmenAge';
 export default {
   props: ['type'],
@@ -32,7 +32,7 @@ export default {
     HeaderSelf,
     DataCountChart,
     ApartmenChart,
-    DataCountAge,
+    DataCountAgeChart,
     ApartmenAge
   },
   methods: {
