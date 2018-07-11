@@ -1,6 +1,6 @@
 # demo
 
-> my first vue project
+> RealTimeInventory
 
 ## Build Setup
 
