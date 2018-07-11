@@ -2,7 +2,7 @@
   <div class="container">
     <div class="warehouse" v-show="type===0">
       <data-count-chart :main="main" :money="money"></data-count-chart>
-      <apartmen-chart :main="main"></apartmen-chart>
+      <apartmen-chart :main="main" :money="money"></apartmen-chart>
     </div>
     <div class="wareage" v-show="type===1">
       <data-count-age-chart :mainage="mainage"></data-count-age-chart>

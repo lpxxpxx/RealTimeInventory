@@ -55,6 +55,19 @@ export default {
       mainage: {}
     }
   },
+  watch: {
+    money: function() {
+      var _this = this;
+      console.log(1)
+      this.$http.get("http://purchase-brand.aukeyit.com/api/stock?type=" + _this.money).then(function (resp) {
+        if (resp.data.code == 200) {
+          _this.main = resp.data.data
+        }
+      }).catch(function(resp) {
+        _this.$vux.toast.text('加载失败', 'middle');
+      });
+    }
+  },
   methods: {
     okChange: function (res) {
       this.type = res

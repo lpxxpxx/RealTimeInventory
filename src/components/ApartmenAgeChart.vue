@@ -35,10 +35,16 @@ export default {
       var _this = this,
           res = [];
       this.mainage.orgAgeList.map(function(dept) {
-        res.push({dept: dept.orgName, name: '0~30', count: Number((dept.orgMoney30 / 10000).toFixed(0))});
-        res.push({dept: dept.orgName, name: '30~90', count: Number((dept.orgMoney90 / 10000).toFixed(0))});
-        res.push({dept: dept.orgName, name: '90~150', count: Number((dept.orgMoney150 / 10000).toFixed(0))});
-        res.push({dept: dept.orgName, name: '150+', count: Number((dept.orgMoney200 / 10000).toFixed(0))});
+        let name = '';
+        if(dept.orgName.length > 4) {
+          name = dept.orgName.substring(dept.orgName.length-3);
+        } else {
+          name = dept.orgName.substring(dept.orgName.length-2);
+        }
+        res.push({dept: name, name: '0~30', count: Number((dept.orgMoney30 / 10000).toFixed(0))});
+        res.push({dept: name, name: '30~90', count: Number((dept.orgMoney90 / 10000).toFixed(0))});
+        res.push({dept: name, name: '90~150', count: Number((dept.orgMoney150 / 10000).toFixed(0))});
+        res.push({dept: name, name: '150+', count: Number((dept.orgMoney200 / 10000).toFixed(0))});
       });
       return res;
     }
@@ -68,7 +74,7 @@ export default {
           tooltipItems.map(item => {
             const { name, value } = item;
             if (map[name]) {
-              map[name].value = value;
+              map[name].value = value + ' (万元)';
             }
           });
           legend.setItems(Object.values(map));

@@ -13,7 +13,7 @@ export default {
 <style lang="less">
 @import '~vux/src/styles/reset.less';
 @import '~vux/src/styles/1px.less';
-@import '//at.alicdn.com/t/font_666715_xhoj1jwf0enj0pb9.css';
+@import 'http://at.alicdn.com/t/font_666715_xhoj1jwf0enj0pb9.css';
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

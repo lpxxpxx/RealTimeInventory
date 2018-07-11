@@ -81,7 +81,8 @@ export default {
     return {
       timeDimensionIndex: 0,
       index: 0,
-      chart: null
+      chart: null,
+      chart2: null
     };
   },
   computed: {
@@ -133,6 +134,14 @@ export default {
           break;
       }
       return res;
+    }
+  },
+  watch: {
+    money: function() {
+      this.chart.destroy();
+      this.chart2.destroy();
+      this.renderChart();
+      this.renderChart2();
     }
   },
   methods: {
@@ -245,12 +254,12 @@ export default {
                     <div style="font-size: 18px;color:#fff;">${Number(
                       _this.chartDataPCS[1].percent
                     )}</div>
-                    <div style="font-size: 12px;color:#ddd;">可售库存（件）</div>
+                    <div style="font-size: 12px;color:#ddd;">可售库存PSC（件）</div>
                 </div>`
       });
       // Step 4: 渲染图表
       chart.render();
-      this.chart = chart;
+      this.chart2 = chart;
     }
   }
 };
