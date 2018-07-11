@@ -1,7 +1,7 @@
 <template>
   <div class="datacount">
-      <div>
-        <canvas id="chart"></canvas>
+      <div style="background: #5077a9">
+        <canvas id="chart2"></canvas>
       </div>
       <div class="total">
         <grid :show-lr-borders="false" :show-vertical-dividers="false">
@@ -65,26 +65,26 @@ export default {
     return {
       dept: [
         {
-          value: '3674',
-          percent: '36%',
+          value: 3674,
+          percent: '0.36',
           name: '0~30',
           a: 1
         },
         {
-          value: '4548',
-          percent: '45%',
+          value: 4548,
+          percent: '0.45',
           name: '30~90',
           a: 1
         },
         {
-          value: '59797',
-          percent: '58%',
+          value: 59797,
+          percent: '0.58',
           name: '90~150',
           a: 1
         },
         {
-          value: '2547',
-          percent: '26%',
+          value: 2547,
+          percent: '0.26',
           name: '150+',
           a: 1
         }
@@ -104,7 +104,7 @@ export default {
       const chart = new F2.Chart({
         width: window.innerWidth,
         height: _this.height,
-        id: 'chart',
+        id: 'chart2',
         pixelRatio: window.devicePixelRatio // 指定分辨率
       });
       // Step 2: 载入数据源
@@ -140,11 +140,8 @@ export default {
       chart.guide().html({
         position: ['50%', '45%'],
         html: `<div style="width: 200px;height: 40px;text-align: center;">
-                    <div style="font-size: 12px;color:#FF9F26;">7月：${Number(_this.dept[0].percent).toFixed(2)}</div>
-                    <div style="font-size: 18px;color:#fff;">${Number(
-                      _this.dept[1].percent
-                    ).toFixed(2)}</div>
-                    <div style="font-size: 12px;color:#ddd;">可售库存（万元）</div>
+                    <div style="font-size: 18px;color:#fff;">227天</div>
+                    <div style="font-size: 12px;color:#ddd;">当前公司总存货平均库龄</div>
                 </div>`
       });
       // Step 4: 渲染图表

@@ -6,7 +6,7 @@
     </div>
     <div class="wareage" v-show="type===1">
       <data-count-age-chart></data-count-age-chart>
-      <apartmenAge></apartmenAge>
+      <apartmen-age-chart></apartmen-age-chart>
     </div>
   </div>
 </template>
@@ -25,7 +25,7 @@ import HeaderSelf from './Header';
 import DataCountChart from './DataCountChart';
 import ApartmenChart from './ApartmenChart';
 import DataCountAgeChart from './DataCountAgeChart';
-import ApartmenAge from './ApartmenAge';
+import ApartmenAgeChart from './ApartmenAgeChart';
 export default {
   props: ['type'],
   components: {
@@ -33,7 +33,7 @@ export default {
     DataCountChart,
     ApartmenChart,
     DataCountAgeChart,
-    ApartmenAge
+    ApartmenAgeChart
   },
   methods: {
     okChange: function (res) {
