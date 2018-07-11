@@ -19,6 +19,7 @@
 /* eslint-disable */
 import F2 from '@antv/f2';
 export default {
+  props: ['mainage'],
   mounted: function() {
     this.getChartData();
   },
@@ -26,111 +27,21 @@ export default {
     return {
       timeDimensionIndex: 0,
       index: 0,
-      chart: null,
-      chartData: [
-        { name: '总库存', percent: 3.22, a: 1 },
-        { name: '可售库存', percent: 2.0, a: 1 }
-      ],
-      data: [
-        {
-          name: '库存总额',
-          部门: '品牌一部',
-          数量: 18.9
-        }, {
-          name: '库存总额',
-          部门: '品牌二部',
-          数量: 28.8
-        }, {
-          name: '库存总额',
-          部门: '品牌三部',
-          数量: 39.3
-        }, {
-          name: '库存总额',
-          部门: '品牌四部',
-          数量: 81.4
-        }, {
-          name: '库存总额',
-          部门: '品牌五部',
-          数量: 47
-        }, {
-          name: '库存总额',
-          部门: '品牌六部',
-          数量: 20.3
-        }, {
-          name: '库存总额',
-          部门: '品牌七部',
-          数量: 24
-        }, {
-          name: '库存总额',
-          部门: '品牌八部',
-          数量: 35.6
-        }, {
-          name: '可售总额',
-          部门: '品牌一部',
-          数量: 12.4
-        }, {
-          name: '可售总额',
-          部门: '品牌二部',
-          数量: 23.2
-        }, {
-          name: '可售总额',
-          部门: '品牌三部',
-          数量: 34.5
-        }, {
-          name: '可售总额',
-          部门: '品牌四部',
-          数量: 99.7
-        }, {
-          name: '可售总额',
-          部门: '品牌五部',
-          数量: 52.6
-        }, {
-          name: '可售总额',
-          部门: '品牌六部',
-          数量: 35.5
-        }, {
-          name: '可售总额',
-          部门: '品牌七部',
-          数量: 37.4
-        }, {
-          name: '可售总额',
-          部门: '品牌八部',
-          数量: 42.4
-        }, {
-          name: '可售比例',
-          部门: '品牌一部',
-          数量: 18.9
-        }, {
-          name: '可售比例',
-          部门: '品牌二部',
-          数量: 28.8
-        }, {
-          name: '可售比例',
-          部门: '品牌三部',
-          数量: 39.3
-        }, {
-          name: '可售比例',
-          部门: '品牌四部',
-          数量: 81.4
-        }, {
-          name: '可售比例',
-          部门: '品牌五部',
-          数量: 47
-        }, {
-          name: '可售比例',
-          部门: '品牌六部',
-          数量: 20.3
-        }, {
-          name: '可售比例',
-          部门: '品牌七部',
-          数量: 24
-        }, {
-          name: '可售比例',
-          部门: '品牌八部',
-          数量: 35.6
-        }
-      ]
+      chart: null
     };
+  },
+  computed: {
+    data: function() {
+      var _this = this,
+          res = [];
+      this.mainage.orgAgeList.map(function(dept) {
+        res.push({dept: dept.orgName, name: '0~30', count: Number((dept.orgMoney30 / 10000).toFixed(0))});
+        res.push({dept: dept.orgName, name: '30~90', count: Number((dept.orgMoney90 / 10000).toFixed(0))});
+        res.push({dept: dept.orgName, name: '90~150', count: Number((dept.orgMoney150 / 10000).toFixed(0))});
+        res.push({dept: dept.orgName, name: '150+', count: Number((dept.orgMoney200 / 10000).toFixed(0))});
+      });
+      return res;
+    }
   },
   methods: {
     getChartData: function() {
@@ -168,7 +79,7 @@ export default {
         }
       });
 
-      chart.interval().position('部门*数量').color('name').adjust('stack');
+      chart.interval().position('dept*count').color('name').adjust('stack');
       chart.render();
     }
   }

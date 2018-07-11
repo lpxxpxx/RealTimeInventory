@@ -16,9 +16,13 @@
     </div>
     <div class="total">
       <grid :show-lr-borders="false" :show-vertical-dividers="false">
-        <grid-item v-for="(item, index) in chartData" :key="index">
-          <span>{{ index === 0 ? '当前公司总存货(元)' : '当前公司总存货PCS' }}</span>
-          <p>{{ item.percent }}</p>
+        <grid-item>
+          <span>当前公司总存货(元)</span>
+          <p>{{ chartData[0].percent }}</p>
+        </grid-item>
+        <grid-item>
+          <span>当前公司总存货PCS(件)</span>
+          <p>{{ chartDataPCS[0].percent }}</p>
         </grid-item>
       </grid>
     </div>
@@ -58,14 +62,12 @@
 }
 </style>
 
-
 <script>
 import F2 from '@antv/f2';
-import { Tab, TabItem, Swiper, SwiperItem, Grid, GridItem } from 'vux';
+import { Swiper, SwiperItem, Grid, GridItem } from 'vux';
 export default {
+  props: ['main', 'money'],
   components: {
-    Tab,
-    TabItem,
     Swiper,
     SwiperItem,
     Grid,
@@ -78,17 +80,8 @@ export default {
   data() {
     return {
       timeDimensionIndex: 0,
-      list: ['总库存', '可售库存'],
       index: 0,
-      chart: null,
-      chartData: [
-        { name: '总库存', percent: 10000000.00, a: 1 },
-        { name: '可售库存', percent: 6597437.32, a: 1 }
-      ],
-      chartDataPCS: [
-        { name: '总库存', percent: 1000000, a: 1 },
-        { name: '可售库存', percent: 657437, a: 1 }
-      ]
+      chart: null
     };
   },
   computed: {
@@ -96,6 +89,50 @@ export default {
       return window.innerWidth > window.innerHeight
               ? window.innerHeight - 54
               : window.innerWidth * 0.707 + ''
+    },
+    chartData: function() {
+      var res = [];
+      res[0] = {name: '总库存', percent: this.main.totalMoney, a: 1};
+      switch (this.money) {
+        case 1:
+          res[1] = {name: '可售库存', percent: this.main.fbaMoney, a: 1};
+          break;
+        case 2:
+          res[1] = {name: '海外在途', percent: this.main.overseaTransferMoney, a: 1};
+          break;
+        case 3:
+          res[1] = {name: '头程在途', percent: this.main.headMoney, a: 1};
+          break;
+        case 4:
+          res[1] = {name: '中转仓库存', percent: this.main.transferWarehouseMoney, a: 1};
+          break;
+        default:
+          res[1] = {name: '海外仓', percent: this.main.overseaStockMoney, a: 1};
+          break;
+      }
+      return res;
+    },
+    chartDataPCS: function() {
+      var res = [];
+      res[0] = {name: '总库存', percent: this.main.totalPcs, a: 1};
+      switch (this.money) {
+        case 1:
+          res[1] = {name: '可售库存', percent: this.main.fbaPcs, a: 1};
+          break;
+        case 2:
+          res[1] = {name: '海外在途', percent: this.main.overseaTransferPcs, a: 1};
+          break;
+        case 3:
+          res[1] = {name: '头程在途', percent: this.main.headPcs, a: 1};
+          break;
+        case 4:
+          res[1] = {name: '中转仓库存', percent: this.main.transferWarehousePcs, a: 1};
+          break;
+        default:
+          res[1] = {name: '海外仓', percent: this.main.overseaStockPcs, a: 1};
+          break;
+      }
+      return res;
     }
   },
   methods: {
@@ -204,11 +241,11 @@ export default {
       chart.guide().html({
         position: ['50%', '45%'],
         html: `<div style="width: 200px;height: 40px;text-align: center;">
-                    <div style="font-size: 12px;color:#FF9F26;">7月：${Number(_this.chartData[0].percent)}</div>
+                    <div style="font-size: 12px;color:#FF9F26;">总：${Number(_this.chartDataPCS[0].percent)}</div>
                     <div style="font-size: 18px;color:#fff;">${Number(
-                      _this.chartData[1].percent
+                      _this.chartDataPCS[1].percent
                     )}</div>
-                    <div style="font-size: 12px;color:#ddd;">可售库存（PCS）</div>
+                    <div style="font-size: 12px;color:#ddd;">可售库存（件）</div>
                 </div>`
       });
       // Step 4: 渲染图表

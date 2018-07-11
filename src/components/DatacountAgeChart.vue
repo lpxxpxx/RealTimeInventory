@@ -5,8 +5,8 @@
       </div>
       <div class="total">
         <grid :show-lr-borders="false" :show-vertical-dividers="false">
-          <grid-item v-for="(item, index) in dept" :key="index">
-            <span>{{ item.text }}</span>
+          <grid-item v-for="(item, index) in chartDataAge" :key="index">
+            <span>{{ item.name }}</span>
             <p>{{ item.value }}<span>&nbsp;万元</span></p>
             <span class="grid-bot">{{ item.percent }}</span>
           </grid-item>
@@ -32,14 +32,11 @@
     font-size: 12px;
   }
   .total p{
-    font-size: 16px;
+    font-size: 14px;
     opacity: 0.9;
   }
   .total p span{
     font-size: 12px;
-  }
-  .grid-bot{
-    
   }
   .weui-grid:active{
     background-color: #5e84bb;
@@ -51,7 +48,7 @@
 import F2 from '@antv/f2';
 import { Countup, XButton, Grid, GridItem } from 'vux'
 export default {
-  props: ['type'],
+  props: ['mainage'],
   components: {
     Countup,
     XButton,
@@ -63,32 +60,7 @@ export default {
   },
   data() {
     return {
-      dept: [
-        {
-          value: 3674,
-          percent: '0.36',
-          name: '0~30',
-          a: 1
-        },
-        {
-          value: 4548,
-          percent: '0.45',
-          name: '30~90',
-          a: 1
-        },
-        {
-          value: 59797,
-          percent: '0.58',
-          name: '90~150',
-          a: 1
-        },
-        {
-          value: 2547,
-          percent: '0.26',
-          name: '150+',
-          a: 1
-        }
-      ]
+
     };
   },
   computed: {
@@ -96,6 +68,14 @@ export default {
       return window.innerWidth > window.innerHeight
               ? window.innerHeight - 54
               : window.innerWidth * 0.707 + ''
+    },
+    chartDataAge: function() {
+      var res = [];
+      res.push({name: '0~30', value: Number((this.mainage.money30 / 10000).toFixed(2)), percent: (this.mainage.money30 / this.mainage.moneyAll * 100).toFixed(2) + '%', a: 1});
+      res.push({name: '30~90', value: Number((this.mainage.money90 / 10000).toFixed(2)), percent: (this.mainage.money90 / this.mainage.moneyAll * 100).toFixed(2) + '%', a: 1});
+      res.push({name: '90~150', value: Number((this.mainage.money150 / 10000).toFixed(2)), percent: (this.mainage.money150 / this.mainage.moneyAll * 100).toFixed(2) + '%', a: 1});
+      res.push({name: '150+', value: Number((this.mainage.money200 / 10000).toFixed(2)), percent: (this.mainage.money200 / this.mainage.moneyAll * 100).toFixed(2) + '%', a: 1});
+      return res;
     }
   },
   methods: {
@@ -108,7 +88,7 @@ export default {
         pixelRatio: window.devicePixelRatio // 指定分辨率
       });
       // Step 2: 载入数据源
-      chart.source(_this.dept);
+      chart.source(_this.chartDataAge);
       chart.tooltip(false);
       chart.legend({
         position: 'right',
@@ -138,9 +118,9 @@ export default {
         .adjust('stack')
         .size(5);
       chart.guide().html({
-        position: ['50%', '45%'],
+        position: ['50%', '50%'],
         html: `<div style="width: 200px;height: 40px;text-align: center;">
-                    <div style="font-size: 18px;color:#fff;">227天</div>
+                    <div style="font-size: 18px;color:#fff;">${Number(_this.mainage.totalAvgAge)}天</div>
                     <div style="font-size: 12px;color:#ddd;">当前公司总存货平均库龄</div>
                 </div>`
       });
