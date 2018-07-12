@@ -5,9 +5,10 @@
         <button-tab>
           <button-tab-item selected @on-item-click = "$emit('typeText',0);">{{ tab1 }}</button-tab-item>
           <button-tab-item @on-item-click = "$emit('typeText',1);">{{ tab2 }}</button-tab-item>
+          <button-tab-item @on-item-click = "$emit('typeText',2);">{{ tab3 }}</button-tab-item>
         </button-tab>
       </div>
-      <a class="iconfont icon-chart" slot="right" @click="indexChange"></a>
+      <a class="iconfont icon-chart" slot="right" @click="indexChange" :style="{color: index ? '#fff' : '#ccc'}"></a>
     </x-header>
   </div>
 </template>
@@ -25,7 +26,7 @@
     color:#fff;
     background-color: transparent;
   }
-  .vux-button-group > a.vux-button-tab-item-last:after,.vux-button-group > a.vux-button-tab-item-first:after{
+  .vux-button-group > a.vux-button-tab-item-last:after, .vux-button-group > a.vux-button-tab-item-middle:after, .vux-button-group > a.vux-button-tab-item-first:after{
     border: none;
   }
   .headerfixed{
@@ -54,6 +55,7 @@ export default {
     return {
       tab1: "实时库存",
       tab2: "实时库龄",
+      tab3: "实时总库龄",
       index: 0
     }
   },

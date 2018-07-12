@@ -18,11 +18,11 @@
       <grid :show-lr-borders="false" :show-vertical-dividers="false">
         <grid-item>
           <span>当前公司总存货(元)</span>
-          <p>{{ chartData[0].percent }}</p>
+          <p>{{ $toThousands(chartData[0].percent) }}</p>
         </grid-item>
         <grid-item>
           <span>当前公司总存货PCS(件)</span>
-          <p>{{ chartDataPCS[0].percent }}</p>
+          <p>{{ $toThousands(chartDataPCS[0].percent) }}</p>
         </grid-item>
       </grid>
     </div>
@@ -76,6 +76,7 @@ export default {
   mounted: function() {
     this.renderChart();
     this.renderChart2();
+    console.log(this.$toThousands(1564654.11))
   },
   data() {
     return {
@@ -192,11 +193,9 @@ export default {
       chart.guide().html({
         position: ['50%', '45%'],
         html: `<div style="width: 200px;height: 40px;text-align: center;">
-                    <div style="font-size: 12px;color:#FF9F26;">7月：${Number(_this.chartData[0].percent).toFixed(2)}</div>
-                    <div style="font-size: 18px;color:#fff;">${Number(
-                      _this.chartData[1].percent
-                    ).toFixed(2)}</div>
-                    <div style="font-size: 12px;color:#ddd;">可售库存（万元）</div>
+                    <div style="font-size: 12px;color:#FF9F26;">占比：${Number(_this.chartData[1].percent / _this.chartData[0].percent * 100).toFixed(2) + '%'}</div>
+                    <div style="font-size: 18px;color:#fff;">${_this.$toThousands(_this.chartData[1].percent)}</div>
+                    <div style="font-size: 12px;color:#ddd;">可售库存（元）</div>
                 </div>`
       });
       // Step 4: 渲染图表
@@ -250,10 +249,8 @@ export default {
       chart.guide().html({
         position: ['50%', '45%'],
         html: `<div style="width: 200px;height: 40px;text-align: center;">
-                    <div style="font-size: 12px;color:#FF9F26;">总：${Number(_this.chartDataPCS[0].percent)}</div>
-                    <div style="font-size: 18px;color:#fff;">${Number(
-                      _this.chartDataPCS[1].percent
-                    )}</div>
+                    <div style="font-size: 12px;color:#FF9F26;">占比：${Number(_this.chartDataPCS[1].percent / this.chartDataPCS[0].percent * 100).toFixed(2) + '%'}</div>
+                    <div style="font-size: 18px;color:#fff;">${_this.$toThousands(_this.chartDataPCS[1].percent)}</div>
                     <div style="font-size: 12px;color:#ddd;">可售库存PSC（件）</div>
                 </div>`
       });

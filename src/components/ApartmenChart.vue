@@ -7,6 +7,7 @@
 <style lang="less" scoped>
 .content {
   background: #fff;
+  padding-bottom: 40px;
 }
 .tab-item {
   background: #5077a9!important;
@@ -31,25 +32,33 @@ export default {
     };
   },
   computed: {
+    maxMoney: function() {
+      var res = 0;
+      this.main.orgStockList.map(function(dept) {
+        if(dept.orgMoney > res) res = dept.orgMoney;
+      })
+      return res;
+    },
     data: function() {
-      var res = [];
+      var _this = this,
+          res = [];
       this.main.orgStockList.map(function(dept) {
         let name = '';
         if(dept.orgName.length > 4) {
-          name = dept.orgName.substring(dept.orgName.length-3);
+          name = dept.orgName.substring(dept.orgName.length-3, dept.orgName.length-1);
         } else {
           name = dept.orgName.substring(dept.orgName.length-2);
         }
         res.push({name: '库存总额', dept: name, count: Number((dept.orgMoney / 10000).toFixed(0))});
         res.push({name: '可售库存', dept: name, count: Number((dept.fbaMoney / 10000).toFixed(0))});
-        res.push({name: '可售比例', dept: name, count: Number((dept.fbaMoney / dept.orgMoney * 100).toFixed(1))});
+        res.push({name: '可售比例', dept: name, count: Number((dept.fbaMoney / dept.orgMoney / 10000 * _this.maxMoney).toFixed(0)) + Number((_this.maxMoney / 10000000000).toFixed(6))});
       });
       return res;
-    },
-
+    }
   },
   methods: {
     getChartData: function() {
+      var _this = this;
       var chart = new F2.Chart({
         width: window.innerWidth,
         height:
@@ -75,8 +84,11 @@ export default {
           });
           tooltipItems.map(item => {
             const { name, value } = item;
-            if (map[name]) {
-              map[name].value = value;
+            if (map[name] && name == '可售比例') {
+              let s = (value + '').split('.');
+              map[name].value = (s[0] / s[1] * 100).toFixed(2) + '%';
+            } else if (map[name]) {
+              map[name].value = value + ' (万元)';
             }
           });
           legend.setItems(Object.values(map));

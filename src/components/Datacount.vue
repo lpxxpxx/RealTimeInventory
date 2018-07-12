@@ -22,11 +22,11 @@
         <grid :show-lr-borders="false" :show-vertical-dividers="false">
           <grid-item>
             <span>当前公司总存货(元)</span>
-            <p>{{ main.totalMoney }}</p>
+            <p>{{ $toThousands(main.totalMoney) }}</p>
           </grid-item>
           <grid-item>
             <span>当前公司总存货PCS</span>
-            <p>{{ main.totalPcs }}</p>
+            <p>{{ $toThousands(main.totalPcs) }}</p>
           </grid-item>
         </grid>
       </div>

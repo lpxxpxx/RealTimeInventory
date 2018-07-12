@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <canvas id="chart3"></canvas>
+    <canvas id="chart4"></canvas>
   </div>
 </template>
 
@@ -20,7 +20,7 @@
 /* eslint-disable */
 import F2 from '@antv/f2';
 export default {
-  props: ['mainage'],
+  props: ['mainagetotal'],
   mounted: function() {
     this.getChartData();
   },
@@ -36,7 +36,7 @@ export default {
     data: function() {
       var _this = this,
           res = [];
-      this.mainage.orgAgeList.map(function(dept) {
+      this.mainagetotal.orgAgeList.map(function(dept) {
         let name = '';
         if(dept.orgName.length > 4) {
           name = dept.orgName.substring(dept.orgName.length-3, dept.orgName.length-1);
@@ -61,7 +61,7 @@ export default {
           window.innerWidth > window.innerHeight
             ? window.innerHeight - 54
             : window.innerWidth * 0.707,
-        id: 'chart3',
+        id: 'chart4',
         pixelRatio: window.devicePixelRatio,
       });
       chart.source(this.data);
