@@ -1,12 +1,12 @@
 <template>
   <div class="container">
-    <div class="warehouse" v-show="type===0">
-      <data-count></data-count>
-      <apartmen></apartmen>
+    <div class="warehouse" v-if="type===0">
+      <data-count :main="main" :money="money"></data-count>
+      <apartmen :main="main" :money="money" v-if="status===0"></apartmen>
     </div>
-    <div class="wareage" v-show="type===1">
-      <data-countAge v-bind:type = "type"></data-countAge>
-      <apartmenAge></apartmenAge>
+    <div class="wareage" v-if="type===1">
+      <data-countAge :mainage="mainage" v-bind:type = "type"></data-countAge>
+      <apartmenAge :mainage="mainage" v-if="status===0"></apartmenAge>
     </div>
   </div>
 </template>
@@ -27,7 +27,7 @@ import Apartmen from './Apartmen';
 import DataCountAge from './DatacountAge';
 import ApartmenAge from './ApartmenAge';
 export default {
-  props: ['type'],
+  props: ['type', 'main', 'mainage', 'money', 'status'],
   components: {
     HeaderSelf,
     DataCount,

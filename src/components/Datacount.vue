@@ -4,15 +4,15 @@
           <swiper dots-position="center" dots-class="dots" height="160px">
             <swiper-item>
               <div class="main-val">
-                <p class="mv-title">占比：60%</p>
-                <countup :end-val="56245521" :duration="2" :decimals="0"></countup>&nbsp;元
+                <p class="mv-title">占比：{{ parseInt(main.fbaMoney / main.totalMoney * 100) }}%</p>
+                <countup :end-val="Number(main.fbaMoney.toFixed(0))" :duration="2" :decimals="0"></countup>&nbsp;元
                 <p class="mv-title">当前公司可售库存(FBA)</p>
               </div>
             </swiper-item>
             <swiper-item>
                 <div class="main-val">
-                <p class="mv-title">占比：55%</p>
-                <span>787858</span>&nbsp;件
+                <p class="mv-title">占比：{{ parseInt(main.fbaPcs / main.totalPcs * 100) }}%</p>
+                <span>{{ main.fbaPcs }}</span>&nbsp;件
                 <p class="mv-title">当前公司可售库存PCS</p>
               </div>
             </swiper-item>
@@ -20,9 +20,13 @@
       </div>
       <div class="total">
         <grid :show-lr-borders="false" :show-vertical-dividers="false">
-          <grid-item v-for="(item, index) in dept" :key="index">
-            <span>{{ item.text }}</span>
-            <p>{{ item.value }}</p>
+          <grid-item>
+            <span>当前公司总存货(元)</span>
+            <p>{{ main.totalMoney }}</p>
+          </grid-item>
+          <grid-item>
+            <span>当前公司总存货PCS</span>
+            <p>{{ main.totalPcs }}</p>
           </grid-item>
         </grid>
       </div>
@@ -81,6 +85,7 @@
 <script>
 import { Countup, XButton, Grid, GridItem, Swiper, SwiperItem } from 'vux'
 export default {
+  props: ['main', 'money'],
   components: {
     Countup,
     XButton,
@@ -91,19 +96,7 @@ export default {
   },
   data() {
     return {
-      dept: [
-        {
-          value: '10000000',
-          text: '当前公司总存货(元)',
-          key: 1
-        },
-        {
-          value: '6597437',
-          text: '当前公司总存货PCS',
-          key: 2
-        }
-      ],
-      height: document.documentElement.clientWidth * 0.6
+      
     };
   }
 };

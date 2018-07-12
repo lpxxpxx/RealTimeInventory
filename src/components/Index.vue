@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <header-self @typeText="okChange($event)" @indexText="indexChange($event)"></header-self>
-    <main-table :type="type" :main="main" :mainage="mainage" :money="money" v-if="index===0"></main-table>
+    <main-table :type="type" :main="main" :mainage="mainage" :money="money" :status="status" v-if="index===0"></main-table>
     <main-chart :type="type" :main="main" :mainage="mainage" :money="money"  v-if="index===1"></main-chart>
     <div class="bg"></div>
   </div>
@@ -33,14 +33,15 @@ export default {
     var _this = this;
     this.$http.get("http://purchase-brand.aukeyit.com/api/stock?type=" + _this.money).then(function (resp) {
       if (resp.data.code == 200) {
-        _this.main = resp.data.data
+        _this.main = resp.data.data;
+        _this.status=0;
       }
     }).catch(function(resp) {
       _this.$vux.toast.text('加载失败', 'middle');
     });
     this.$http.get("http://purchase-brand.aukeyit.com/api/age?type=1").then(function (resp) {
       if (resp.data.code == 200) {
-        _this.mainage = resp.data.data
+        _this.mainage = resp.data.data;
       }
     }).catch(function(resp) {
       _this.$vux.toast.text('加载失败', 'middle');
@@ -51,6 +52,7 @@ export default {
       type: 0,
       index: 0,
       money: 1,
+      status: 1,
       main: {},
       mainage: {}
     }

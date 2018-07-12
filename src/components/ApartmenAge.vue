@@ -10,27 +10,33 @@
         <h1>{{ item.name }}</h1>
         <div class="db-item">
           <div class="it-pro">
-            <x-progress :percent="60" :show-cancel="false" class="it1"></x-progress>
+            <x-progress :percent="Number(parseInt(item.average / maximumAmount * 100))" :show-cancel="false" class="it1"></x-progress>
           </div>
           <p>平均库龄<span>{{ item.average }}<em>&nbsp;天</em></span></p>
         </div>
         <div class="db-item">
           <div class="it-pro">
-            <x-progress :percent="76" :show-cancel="false" class="it2"></x-progress>
+            <x-progress :percent="Number(parseInt(item.date1 / maximumAmount1 * 100))" :show-cancel="false" class="it2"></x-progress>
           </div>
-          <p>30-90<span>{{ item.date30 }}</span></p>
+          <p>0-30<span>{{ item.date1 }}<em>&nbsp;元</em></span></p>
         </div>
         <div class="db-item">
           <div class="it-pro">
-            <x-progress :percent="36" :show-cancel="false" class="it3"></x-progress>
+            <x-progress :percent="Number(parseInt(item.date30 / maximumAmount2 * 100))" :show-cancel="false" class="it2"></x-progress>
           </div>
-          <p>90-150<span>{{ item.date90 }}</span></p>
+          <p>30-90<span>{{ item.date30 }}<em>&nbsp;元</em></span></p>
         </div>
         <div class="db-item">
           <div class="it-pro">
-            <x-progress :percent="26" :show-cancel="false" class="it4"></x-progress>
+            <x-progress :percent="Number(parseInt(item.date90 / maximumAmount3 * 100))" :show-cancel="false" class="it3"></x-progress>
           </div>
-          <p>150+<span>{{ item.date150 }}</span></p>
+          <p>90-150<span>{{ item.date90 }}<em>&nbsp;元</em></span></p>
+        </div>
+        <div class="db-item">
+          <div class="it-pro">
+            <x-progress :percent="Number(parseInt(item.date150 / maximumAmount4 * 100))" :show-cancel="false" class="it4"></x-progress>
+          </div>
+          <p>150+<span>{{ item.date150 }}<em>&nbsp;元</em></span></p>
         </div>
       </div>
     </div>
@@ -96,6 +102,7 @@
 <script>
 import { Tab, TabItem, XProgress } from 'vux'
 export default {
+  props: ['mainage'],
   components: {
     Tab,
     TabItem,
@@ -107,51 +114,56 @@ export default {
       scroll: '',
       index: 0,
       isfixed: false,
-      tabOffsetTop1: 10,
-      age: [
-        {
-          name: '品牌一部',
-          average: 325,
-          date30: 98797,
-          date90: 154878,
-          date150: 24848
-        },
-        {
-          name: '品牌二部',
-          average: 264,
-          date30: 1545,
-          date90: 1423,
-          date150: 987
-        },
-        {
-          name: '品牌三部',
-          average: 200,
-          date30: 1544,
-          date90: 36477,
-          date150: 265654
-        },
-        {
-          name: '品牌四部',
-          average: 168,
-          date30: 26596549,
-          date90: 546544,
-          date150: 36549494
-        },
-        {
-          name: '品牌五部',
-          average: 92,
-          date30: 6549,
-          date90: 5848,
-          date150: 3654
-        }
-      ]
+      tabOffsetTop1: 10
+    }
+  },
+  computed: {
+    age:function() {
+      var res = [];
+      this.mainage.orgAgeList.map(function(dept) {
+        res.push({name: dept.orgName, average: Number(dept.orgAvgAge.toFixed(2)), date1: Number(dept.orgMoney30.toFixed(2)), date30: Number(dept.orgMoney90.toFixed(2)), date90: Number(dept.orgMoney150.toFixed(2)), date150: Number(dept.orgMoney200.toFixed(2))});
+      });
+      return res;
+    },
+    maximumAmount: function() {
+      let max = 0;
+      this.mainage.orgAgeList.map(function(dept) {
+        if (dept.orgAvgAge > max) max = dept.orgAvgAge;
+      });
+      return max;
+    },
+    maximumAmount1: function() {
+      let max = 0;
+      this.mainage.orgAgeList.map(function(dept) {
+        if (dept.orgMoney30 > max) max = dept.orgMoney30;
+      });
+      return max;
+    },
+    maximumAmount2: function() {
+      let max = 0;
+      this.mainage.orgAgeList.map(function(dept) {
+        if (dept.orgMoney90 > max) max = dept.orgMoney90;
+      });
+      return max;
+    },
+    maximumAmount3: function() {
+      let max = 0;
+      this.mainage.orgAgeList.map(function(dept) {
+        if (dept.orgMoney150 > max) max = dept.orgMoney150;
+      });
+      return max;
+    },
+    maximumAmount4: function() {
+      let max = 0;
+      this.mainage.orgAgeList.map(function(dept) {
+        if (dept.orgMoney200 > max) max = dept.orgMoney200;
+      });
+      return max;
     }
   },
   mounted() {
     window.addEventListener('scroll', this.scrolling);
-    this.tabOffsetTop1 = 272;
-  },
-  created: function() {
+    this.tabOffsetTop1 = 272
   },
   methods: {
     clickHandler: function(index) {

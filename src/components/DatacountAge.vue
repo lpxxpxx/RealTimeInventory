@@ -2,7 +2,7 @@
   <div class="datacount">
       <div class="topbox">
           <div class="main-val">
-            <countup :end-val="227" :duration="2" :start="type===1 ? true : false" :decimals="0"></countup>&nbsp;天
+            <countup :end-val="Number(mainage.totalAvgAge.toFixed(0))" :duration="2" :start="type===1 ? true : false" :decimals="0"></countup>&nbsp;天
             <p class="mv-title">当前公司总存货平均库龄</p>
           </div>
       </div>
@@ -69,7 +69,7 @@
 <script>
 import { Countup, XButton, Grid, GridItem } from 'vux'
 export default {
-  props: ['type'],
+  props: ['mainage','type'],
   components: {
     Countup,
     XButton,
@@ -78,33 +78,18 @@ export default {
   },
   data() {
     return {
-      dept: [
-        {
-          value: '3674',
-          percent: '36%',
-          text: '0~30',
-          key: 1
-        },
-        {
-          value: '4548',
-          percent: '45%',
-          text: '30~90',
-          key: 2
-        },
-        {
-          value: '59797',
-          percent: '58%',
-          text: '90~150',
-          key: 1
-        },
-        {
-          value: '2547',
-          percent: '26%',
-          text: '150+',
-          key: 2
-        }
-      ]
+      totalmoney: ''
     };
-  }
+  },
+  computed: {
+    dept: function() {
+      var res = [];
+      res.push({text: '0~30', value: Number((this.mainage.money30 / 10000).toFixed(0)), percent: (this.mainage.money30 / this.mainage.moneyAll * 100).toFixed(0) + '%', a: 1});
+      res.push({text: '30~90', value: Number((this.mainage.money90 / 10000).toFixed(0)), percent: (this.mainage.money90 / this.mainage.moneyAll * 100).toFixed(0) + '%', a: 1});
+      res.push({text: '90~150', value: Number((this.mainage.money150 / 10000).toFixed(0)), percent: (this.mainage.money150 / this.mainage.moneyAll * 100).toFixed(0) + '%', a: 1});
+      res.push({text: '150+', value: Number((this.mainage.money200 / 10000).toFixed(0)), percent: (this.mainage.money200 / this.mainage.moneyAll * 100).toFixed(0) + '%', a: 1});
+      return res;
+    }
+  },
 };
 </script>

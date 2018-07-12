@@ -10,21 +10,21 @@
         <h1>{{ item.name }}</h1>
         <div class="db-item">
           <div class="it-pro">
-            <x-progress :percent="60" :show-cancel="false" class="it1"></x-progress>
+            <x-progress :percent="Number(parseInt(item.total / maximumAmount * 100))" :show-cancel="false" class="it1"></x-progress>
           </div>
           <p>库存总额：<span>{{ item.total }}<em>&nbsp;元</em></span></p>
         </div>
         <div class="db-item">
           <div class="it-pro">
-            <x-progress :percent="45" :show-cancel="false" class="it2"></x-progress>
+            <x-progress :percent="Number(parseInt(item.canSall / maximumAmount1 * 100))" :show-cancel="false" class="it2"></x-progress>
           </div>
           <p>可售库存总额：<span>{{ item.canSall }}<em>&nbsp;元</em></span></p>
         </div>
         <div class="db-item">
           <div class="it-pro">
-            <x-progress :percent="71" :show-cancel="false" class="it3"></x-progress>
+            <x-progress :percent="item.canSall / item.total * 100" :show-cancel="false" class="it3"></x-progress>
           </div>
-          <p>可售库存占比：<span>71%</span></p>
+          <p>可售库存占比：<span>{{ parseInt(item.canSall / item.total * 100) }}%</span></p>
         </div>
       </div>
     </div>
@@ -108,6 +108,7 @@
 <script>
 import { Tab, TabItem, XProgress } from 'vux'
 export default {
+  props: ['main', 'money'],
   components: {
     Tab,
     TabItem,
@@ -119,41 +120,37 @@ export default {
       scroll: '',
       index: 0,
       isfixed: false,
-      tabOffsetTop: 10,
-      ware: [
-        {
-          name: '品牌一部',
-          total: 544887878,
-          canSall: 6898779
-        },
-        {
-          name: '品牌二部',
-          total: 87687878,
-          canSall: 682398779
-        },
-        {
-          name: '品牌三部',
-          total: 21548414887878,
-          canSall: 3994149
-        },
-        {
-          name: '品牌四部',
-          total: 2654948,
-          canSall: 1575945
-        },
-        {
-          name: '品牌五部',
-          total: 354491484,
-          canSall: 6892499997
-        }
-      ]
+      tabOffsetTop: 274
     }
   },
   mounted() {
     window.addEventListener('scroll', this.scrolling);
     this.tabOffsetTop = this.$refs.tabbox.offsetTop + 40;
   },
-  created: function() {
+  computed: {
+    ware: function() {
+      var _this = this,
+          res = [];
+      this.main.orgStockList.map(function(dept) {
+        
+        res.push({name: dept.orgName, total: Number(dept.orgMoney.toFixed(2)), canSall: Number(dept.fbaMoney.toFixed(2))});
+      });
+      return res;
+    },
+    maximumAmount: function() {
+      let max = 0;
+      this.main.orgStockList.map(function(dept) {
+        if (dept.orgMoney > max) max = dept.orgMoney;
+      });
+      return max;
+    },
+    maximumAmount1: function() {
+      let max1 = 0;
+      this.main.orgStockList.map(function(dept) {
+        if (dept.fbaMoney > max1) max1 = dept.fbaMoney;
+      });
+      return max1;
+    },
   },
   methods: {
     clickHandler: function(index) {

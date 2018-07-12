@@ -46,7 +46,7 @@ export default {
       });
       return res;
     },
-    
+
   },
   methods: {
     getChartData: function() {
@@ -60,6 +60,9 @@ export default {
         pixelRatio: window.devicePixelRatio,
       });
       chart.source(this.data);
+      chart.axis('field', {
+        label: null
+      });
       chart.tooltip({
         custom: true, // 自定义 tooltip 内容框
         onChange: function(obj) {
