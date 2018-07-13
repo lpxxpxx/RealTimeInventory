@@ -2,7 +2,7 @@
   <div class="apart">
     <div :class="{ fixedtab: isfixed }" ref="tabbox">
       <tab :line-width="2" active-color='#5077a9' v-model="index">
-        <tab-item active-class="activeon" @on-item-click="clickHandler" :selected="initItem === item.name" v-for="(item, index) in age" @click="initItem = item.name" :key="index">{{item.name}}</tab-item>
+        <tab-item active-class="activeon" @on-item-click="clickHandler" :selected="index === 0" v-for="(item, index) in age" @click="initItem = item.name" :key="index">{{item.name}}</tab-item>
       </tab>
     </div>
     <div ref="listbox" :class="{ marginTop: isfixed }">
@@ -10,31 +10,31 @@
         <h1>{{ item.name }}</h1>
         <div class="db-item">
           <div class="it-pro">
-            <x-progress :percent="Number(parseInt(item.average / maximumAmount * 100))" :show-cancel="false" class="it1"></x-progress>
+            <x-progress :percent="Number(parseInt(item.average / maximumAmountAge * 100))" :show-cancel="false" class="it1"></x-progress>
           </div>
           <p>平均库龄<span>{{ item.average }}<em>&nbsp;天</em></span></p>
         </div>
         <div class="db-item">
           <div class="it-pro">
-            <x-progress :percent="Number(parseInt(item.date1 / maximumAmount1 * 100))" :show-cancel="false" class="it2"></x-progress>
+            <x-progress :percent="Number(parseInt(item.date1 / maximumAmount * 100))" :show-cancel="false" class="it2"></x-progress>
           </div>
           <p>0-30<span>{{ item.date1 }}<em>&nbsp;元</em></span></p>
         </div>
         <div class="db-item">
           <div class="it-pro">
-            <x-progress :percent="Number(parseInt(item.date30 / maximumAmount2 * 100))" :show-cancel="false" class="it2"></x-progress>
+            <x-progress :percent="Number(parseInt(item.date30 / maximumAmount * 100))" :show-cancel="false" class="it2"></x-progress>
           </div>
           <p>30-90<span>{{ item.date30 }}<em>&nbsp;元</em></span></p>
         </div>
         <div class="db-item">
           <div class="it-pro">
-            <x-progress :percent="Number(parseInt(item.date90 / maximumAmount3 * 100))" :show-cancel="false" class="it3"></x-progress>
+            <x-progress :percent="Number(parseInt(item.date90 / maximumAmount * 100))" :show-cancel="false" class="it3"></x-progress>
           </div>
           <p>90-150<span>{{ item.date90 }}<em>&nbsp;元</em></span></p>
         </div>
         <div class="db-item">
           <div class="it-pro">
-            <x-progress :percent="Number(parseInt(item.date150 / maximumAmount4 * 100))" :show-cancel="false" class="it4"></x-progress>
+            <x-progress :percent="Number(parseInt(item.date150 / maximumAmount * 100))" :show-cancel="false" class="it4"></x-progress>
           </div>
           <p>150+<span>{{ item.date150 }}<em>&nbsp;元</em></span></p>
         </div>
@@ -128,35 +128,17 @@ export default {
     maximumAmount: function() {
       let max = 0;
       this.mainage.orgAgeList.map(function(dept) {
-        if (dept.orgAvgAge > max) max = dept.orgAvgAge;
-      });
-      return max;
-    },
-    maximumAmount1: function() {
-      let max = 0;
-      this.mainage.orgAgeList.map(function(dept) {
         if (dept.orgMoney30 > max) max = dept.orgMoney30;
-      });
-      return max;
-    },
-    maximumAmount2: function() {
-      let max = 0;
-      this.mainage.orgAgeList.map(function(dept) {
         if (dept.orgMoney90 > max) max = dept.orgMoney90;
-      });
-      return max;
-    },
-    maximumAmount3: function() {
-      let max = 0;
-      this.mainage.orgAgeList.map(function(dept) {
         if (dept.orgMoney150 > max) max = dept.orgMoney150;
+        if (dept.orgMoney200 > max) max = dept.orgMoney200;
       });
       return max;
     },
-    maximumAmount4: function() {
+    maximumAmountAge: function() {
       let max = 0;
       this.mainage.orgAgeList.map(function(dept) {
-        if (dept.orgMoney200 > max) max = dept.orgMoney200;
+        if (dept.orgAvgAge > max) max = dept.orgAvgAge;
       });
       return max;
     }
@@ -169,6 +151,8 @@ export default {
     clickHandler: function(index) {
       let targetoffTop = this.$refs.listbox.children[index].offsetTop;
       index >= 2 ? document.documentElement.scrollTop = targetoffTop - 86 : targetoffTop = 0;
+      index >= 2 ? window.pageYOffset = targetoffTop - 86 : targetoffTop = 0;
+      index >= 2 ? document.body.scrollTop = targetoffTop - 86 : targetoffTop = 0;
       index >= 2 ? this.isfixed = true : this.isfixed = false
     },
     scrolling: function() {

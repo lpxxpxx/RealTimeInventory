@@ -2,29 +2,29 @@
   <div class="apart">
     <div :class="{ fixedtab: isfixed }" ref="tabbox">
       <tab :line-width="2" active-color='#5077a9' v-model="index">
-        <tab-item active-class="activeon" @on-item-click="clickHandler" :selected="initItem1 === item.name" v-for="(item, index) in ware" @click="initItem1 = item.name" :key="index">{{item.name}}</tab-item>
+        <tab-item active-class="activeon" @on-item-click="clickHandler" :selected="index === 0" v-for="(item, index) in ware" @click="initItem1 = item.deptName" :key="index">{{item.deptName}}</tab-item>
       </tab>
     </div>
     <div ref="listbox" :class="{ marginTop: isfixed }">
       <div class="databox" v-for="(item, index) in ware" :key="index">
-        <h1>{{ item.name }}</h1>
+        <h1>{{ item.deptName }}</h1>
         <div class="db-item">
           <div class="it-pro">
-            <x-progress :percent="Number(parseInt(item.total / maximumAmount * 100))" :show-cancel="false" class="it1"></x-progress>
+            <x-progress :percent="Number(item.count / maximumAmount * 100)" :show-cancel="false" class="it1"></x-progress>
           </div>
-          <p>库存总额：<span>{{ item.total }}<em>&nbsp;元</em></span></p>
+          <p>库存总额：<span>{{ $toThousands(item.count) }}<em>&nbsp;元</em></span></p>
         </div>
         <div class="db-item">
           <div class="it-pro">
-            <x-progress :percent="Number(parseInt(item.canSall / maximumAmount1 * 100))" :show-cancel="false" class="it2"></x-progress>
+            <x-progress :percent="Number(item.pics / maximumAmount * 100)" :show-cancel="false" class="it2"></x-progress>
           </div>
-          <p>可售库存总额：<span>{{ item.canSall }}<em>&nbsp;元</em></span></p>
+          <p>可售库存总额：<span>{{ $toThousands(item.pics) }}<em>&nbsp;元</em></span></p>
         </div>
         <div class="db-item">
           <div class="it-pro">
-            <x-progress :percent="item.canSall / item.total * 100" :show-cancel="false" class="it3"></x-progress>
+            <x-progress :percent="item.pics / item.count * 100" :show-cancel="false" class="it3"></x-progress>
           </div>
-          <p>可售库存占比：<span>{{ parseInt(item.canSall / item.total * 100) }}%</span></p>
+          <p>可售库存占比：<span>{{ (item.pics / item.count * 100).toFixed(2) }}%</span></p>
         </div>
       </div>
     </div>
@@ -132,8 +132,23 @@ export default {
       var _this = this,
           res = [];
       this.main.orgStockList.map(function(dept) {
-        
-        res.push({name: dept.orgName, total: Number(dept.orgMoney.toFixed(2)), canSall: Number(dept.fbaMoney.toFixed(2))});
+        switch (_this.money) {
+          case 0:
+            res.push({name: 'FBA库存', deptName: dept.orgName, count: dept.orgMoney, pics: dept.fbaMoney});
+            break;
+          case 1:
+            res.push({name: '海外在途', deptName: dept.orgName, count: dept.orgMoney, pics: dept.overseaTransferMoney});
+            break;
+          case 2:
+            res.push({name: '头程在途', deptName: dept.orgName, count: dept.orgMoney, pics: dept.headMoney});
+            break;
+          case 3:
+            res.push({name: '中转仓库存', deptName: dept.orgName, count: dept.orgMoney, pics: dept.transferWarehouseMoney});
+            break;
+          default:
+            res.push({name: '海外仓库存', deptName: dept.orgName, count: dept.orgMoney, pics: dept.overseaStockMoney});
+            break;
+        }
       });
       return res;
     },
@@ -143,23 +158,18 @@ export default {
         if (dept.orgMoney > max) max = dept.orgMoney;
       });
       return max;
-    },
-    maximumAmount1: function() {
-      let max1 = 0;
-      this.main.orgStockList.map(function(dept) {
-        if (dept.fbaMoney > max1) max1 = dept.fbaMoney;
-      });
-      return max1;
-    },
+    }
   },
   methods: {
     clickHandler: function(index) {
       let targetoffTop = this.$refs.listbox.children[index].offsetTop;
       index >= 2 ? document.documentElement.scrollTop = targetoffTop - 86 : targetoffTop = 0;
+      index >= 2 ? window.pageYOffset = targetoffTop - 86 : targetoffTop = 0;
+      index >= 2 ? document.body.scrollTop = targetoffTop - 86 : targetoffTop = 0;
       index >= 2 ? this.isfixed = true : this.isfixed = false
     },
     scrolling: function() {
-      this.scroll = document.documentElement.scrollTop || document.body.scrollTop;
+      this.scroll = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
       if (this.scroll > this.tabOffsetTop) {
         this.isfixed = true;
       } else {

@@ -18,11 +18,11 @@
       <grid :show-lr-borders="false" :show-vertical-dividers="false">
         <grid-item>
           <span>当前公司总存货(元)</span>
-          <p>{{ $toThousands(chartData[0].percent) }}</p>
+          <p>{{ $toThousands(chartData[0].percent + chartData[1].percent) }}</p>
         </grid-item>
         <grid-item>
           <span>当前公司总存货PCS(件)</span>
-          <p>{{ $toThousands(chartDataPCS[0].percent) }}</p>
+          <p>{{ $toThousands(chartDataPCS[0].percent + chartDataPCS[1].percent) }}</p>
         </grid-item>
       </grid>
     </div>
@@ -66,7 +66,7 @@
 import F2 from '@antv/f2';
 import { Swiper, SwiperItem, Grid, GridItem } from 'vux';
 export default {
-  props: ['main', 'money'],
+  props: ['main', 'money', 'status'],
   components: {
     Swiper,
     SwiperItem,
@@ -76,10 +76,10 @@ export default {
   mounted: function() {
     this.renderChart();
     this.renderChart2();
-    console.log(this.$toThousands(1564654.11))
   },
   data() {
     return {
+      moneyTypeHeader: ['FBA', '在途', '头程', '中转仓', '海外仓'],
       timeDimensionIndex: 0,
       index: 0,
       chart: null,
@@ -94,21 +94,25 @@ export default {
     },
     chartData: function() {
       var res = [];
-      res[0] = {name: '总库存', percent: this.main.totalMoney, a: 1};
       switch (this.money) {
-        case 1:
+        case 0:
+          res[0] = {name: '其他库存', percent: this.main.totalMoney - this.main.fbaMoney, a: 1};
           res[1] = {name: '可售库存', percent: this.main.fbaMoney, a: 1};
           break;
-        case 2:
+        case 1:
+          res[0] = {name: '其他库存', percent: this.main.totalMoney - this.main.overseaTransferMoney, a: 1};
           res[1] = {name: '海外在途', percent: this.main.overseaTransferMoney, a: 1};
           break;
-        case 3:
+        case 2:
+          res[0] = {name: '其他库存', percent: this.main.totalMoney - this.main.headMoney, a: 1};
           res[1] = {name: '头程在途', percent: this.main.headMoney, a: 1};
           break;
-        case 4:
+        case 3:
+          res[0] = {name: '其他库存', percent: this.main.totalMoney - this.main.transferWarehouseMoney, a: 1};
           res[1] = {name: '中转仓库存', percent: this.main.transferWarehouseMoney, a: 1};
           break;
         default:
+          res[0] = {name: '其他库存', percent: this.main.totalMoney - this.main.overseaStockMoney, a: 1};
           res[1] = {name: '海外仓', percent: this.main.overseaStockMoney, a: 1};
           break;
       }
@@ -116,21 +120,25 @@ export default {
     },
     chartDataPCS: function() {
       var res = [];
-      res[0] = {name: '总库存', percent: this.main.totalPcs, a: 1};
       switch (this.money) {
-        case 1:
+        case 0:
+          res[0] = {name: '总库存', percent: this.main.totalPcs - this.main.fbaPcs, a: 1};
           res[1] = {name: '可售库存', percent: this.main.fbaPcs, a: 1};
           break;
-        case 2:
+        case 1:
+          res[0] = {name: '总库存', percent: this.main.totalPcs - this.main.overseaTransferPcs, a: 1};
           res[1] = {name: '海外在途', percent: this.main.overseaTransferPcs, a: 1};
           break;
-        case 3:
+        case 2:
+          res[0] = {name: '总库存', percent: this.main.totalPcs - this.main.headPcs, a: 1};
           res[1] = {name: '头程在途', percent: this.main.headPcs, a: 1};
           break;
-        case 4:
+        case 3:
+          res[0] = {name: '总库存', percent: this.main.totalPcs - this.main.transferWarehousePcs, a: 1};
           res[1] = {name: '中转仓库存', percent: this.main.transferWarehousePcs, a: 1};
           break;
         default:
+          res[0] = {name: '总库存', percent: this.main.totalPcs - this.main.overseaStockPcs, a: 1};
           res[1] = {name: '海外仓', percent: this.main.overseaStockPcs, a: 1};
           break;
       }
@@ -138,11 +146,13 @@ export default {
     }
   },
   watch: {
-    money: function() {
-      this.chart.destroy();
-      this.chart2.destroy();
-      this.renderChart();
-      this.renderChart2();
+    status: function() {
+      if(this.status % 2 === 0) {
+        this.chart.clear();
+        this.chart2.clear();
+        this.renderChart();
+        this.renderChart2();
+      }
     }
   },
   methods: {
@@ -193,9 +203,9 @@ export default {
       chart.guide().html({
         position: ['50%', '45%'],
         html: `<div style="width: 200px;height: 40px;text-align: center;">
-                    <div style="font-size: 12px;color:#FF9F26;">占比：${Number(_this.chartData[1].percent / _this.chartData[0].percent * 100).toFixed(2) + '%'}</div>
+                    <div style="font-size: 12px;color:#FF9F26;">占比：${Number(_this.chartData[1].percent / (_this.chartData[0].percent + _this.chartData[1].percent) * 100).toFixed(2) + '%'}</div>
                     <div style="font-size: 18px;color:#fff;">${_this.$toThousands(_this.chartData[1].percent)}</div>
-                    <div style="font-size: 12px;color:#ddd;">可售库存（元）</div>
+                    <div style="font-size: 12px;color:#ddd;">${_this.moneyTypeHeader[_this.money]}库存（元）</div>
                 </div>`
       });
       // Step 4: 渲染图表
@@ -249,9 +259,9 @@ export default {
       chart.guide().html({
         position: ['50%', '45%'],
         html: `<div style="width: 200px;height: 40px;text-align: center;">
-                    <div style="font-size: 12px;color:#FF9F26;">占比：${Number(_this.chartDataPCS[1].percent / this.chartDataPCS[0].percent * 100).toFixed(2) + '%'}</div>
+                    <div style="font-size: 12px;color:#FF9F26;">占比：${Number(_this.chartDataPCS[1].percent / (this.chartDataPCS[0].percent + _this.chartDataPCS[1].percent) * 100).toFixed(2) + '%'}</div>
                     <div style="font-size: 18px;color:#fff;">${_this.$toThousands(_this.chartDataPCS[1].percent)}</div>
-                    <div style="font-size: 12px;color:#ddd;">可售库存PSC（件）</div>
+                    <div style="font-size: 12px;color:#ddd;">${_this.moneyTypeHeader[_this.money]}库存PSC（件）</div>
                 </div>`
       });
       // Step 4: 渲染图表

@@ -4,16 +4,16 @@
           <swiper dots-position="center" dots-class="dots" height="160px">
             <swiper-item>
               <div class="main-val">
-                <p class="mv-title">占比：{{ parseInt(main.fbaMoney / main.totalMoney * 100) }}%</p>
-                <countup :end-val="Number(main.fbaMoney.toFixed(0))" :duration="2" :decimals="0"></countup>&nbsp;元
-                <p class="mv-title">当前公司可售库存(FBA)</p>
+                <p class="mv-title">占比：{{ scale[1].percent }}</p>
+                <countup :end-val="scale[0].percent" :duration="2" :decimals="0"></countup>&nbsp;元
+                <p class="mv-title">当前公司{{ scale[0].name }}</p>
               </div>
             </swiper-item>
             <swiper-item>
                 <div class="main-val">
-                <p class="mv-title">占比：{{ parseInt(main.fbaPcs / main.totalPcs * 100) }}%</p>
-                <span>{{ main.fbaPcs }}</span>&nbsp;件
-                <p class="mv-title">当前公司可售库存PCS</p>
+                <p class="mv-title">占比：{{ scale[3].percent }}</p>
+                <countup :end-val="scale[2].percent" :duration="2" :decimals="0"></countup>&nbsp;件
+                <p class="mv-title">当前公司{{ scale[2].name }}PCS</p>
               </div>
             </swiper-item>
           </swiper>
@@ -94,10 +94,43 @@ export default {
     Swiper,
     SwiperItem
   },
-  data() {
-    return {
-      
-    };
+  computed: {
+    scale: function() {
+      var res = [];
+      switch (this.money) {
+        case 0:
+          res[0] = {name: 'FBA库存', percent: parseInt(this.main.fbaMoney)};
+          res[1] = {name: '占总数比', percent: (this.main.fbaMoney / this.main.totalMoney * 100).toFixed(2) + '%'};
+          res[2] = {name: 'FBA库存', percent: parseInt(this.main.fbaPcs)};
+          res[3] = {name: '占总数比', percent: (this.main.fbaPcs / this.main.totalPcs * 100).toFixed(2) + '%'};
+          break;
+        case 1:
+          res[0] = {name: '海外在途', percent: parseInt(this.main.overseaTransferMoney)};
+          res[1] = {name: '占总数比', percent: (this.main.overseaTransferMoney / this.main.totalMoney * 100).toFixed(2) + '%'};
+          res[2] = {name: '海外在途', percent: parseInt(this.main.overseaTransferPcs)};
+          res[3] = {name: '占总数比', percent: (this.main.overseaTransferPcs / this.main.totalPcs * 100).toFixed(2) + '%'};
+          break;
+        case 2:
+          res[0] = {name: '头程在途', percent: parseInt(this.main.headMoney)};
+          res[1] = {name: '占总数比', percent: (this.main.headMoney / this.main.totalMoney * 100).toFixed(2) + '%'};
+          res[2] = {name: '头程在途', percent: parseInt(this.main.headPcs)};
+          res[3] = {name: '占总数比', percent: (this.main.headPcs / this.main.totalPcs * 100).toFixed(2) + '%'};
+          break;
+        case 3:
+          res[0] = {name: '中转仓库存', percent: parseInt(this.main.transferWarehouseMoney)};
+          res[1] = {name: '占总数比', percent: (this.main.transferWarehouseMoney / this.main.totalMoney * 100).toFixed(2) + '%'};
+          res[2] = {name: '中转仓库存', percent: parseInt(this.main.transferWarehousePcs)};
+          res[3] = {name: '占总数比', percent: (this.main.transferWarehousePcs / this.main.totalPcs * 100).toFixed(2) + '%'};
+          break;
+        default:
+          res[0] = {name: '海外仓库存', percent: parseInt(this.main.overseaStockMoney)};
+          res[1] = {name: '占总数比', percent: (this.main.overseaStockMoney / this.main.totalMoney * 100).toFixed(2) + '%'};
+          res[2] = {name: '海外仓库存', percent: parseInt(this.main.overseaStockPcs)};
+          res[3] = {name: '占总数比', percent: (this.main.overseaStockPcs / this.main.totalPcs * 100).toFixed(2) + '%'};
+          break;
+      }
+      return res;
+    }
   }
 };
 </script>

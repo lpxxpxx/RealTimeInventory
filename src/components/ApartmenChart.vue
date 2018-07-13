@@ -20,9 +20,9 @@
 /* eslint-disable */
 import F2 from '@antv/f2';
 export default {
-  props: ['main', 'money'],
+  props: ['main', 'money', 'status'],
   mounted: function() {
-    this.getChartData();
+    this.renderChart();
   },
   data() {
     return {
@@ -30,6 +30,14 @@ export default {
       index: 0,
       chart: null
     };
+  },
+  watch: {
+    status: function() {
+      if(this.status % 2 === 0) {
+        this.chart.clear();
+        this.renderChart();
+      }
+    }
   },
   computed: {
     maxMoney: function() {
@@ -50,14 +58,34 @@ export default {
           name = dept.orgName.substring(dept.orgName.length-2);
         }
         res.push({name: '库存总额', dept: name, count: Number((dept.orgMoney / 10000).toFixed(0))});
-        res.push({name: '可售库存', dept: name, count: Number((dept.fbaMoney / 10000).toFixed(0))});
-        res.push({name: '可售比例', dept: name, count: Number((dept.fbaMoney / dept.orgMoney / 10000 * _this.maxMoney).toFixed(0)) + Number((_this.maxMoney / 10000000000).toFixed(6))});
+        switch (_this.money) {
+          case 0:
+            res.push({name: 'FBA库存', dept: name, count: Number((dept.fbaMoney / 10000).toFixed(0))});
+            res.push({name: '占总数比', dept: name, count: Number((dept.fbaMoney / dept.orgMoney / 10000 * _this.maxMoney).toFixed(0)) + Number((_this.maxMoney / 10000000000).toFixed(6))});
+            break;
+          case 1:
+            res.push({name: '海外在途', dept: name, count: Number((dept.overseaTransferMoney / 10000).toFixed(0))});
+            res.push({name: '占总数比', dept: name, count: Number((dept.overseaTransferMoney / dept.orgMoney / 10000 * _this.maxMoney).toFixed(0)) + Number((_this.maxMoney / 10000000000).toFixed(6))});
+            break;
+          case 2:
+            res.push({name: '头程在途', dept: name, count: Number((dept.headMoney / 10000).toFixed(0))});
+            res.push({name: '占总数比', dept: name, count: Number((dept.headMoney / dept.orgMoney / 10000 * _this.maxMoney).toFixed(0)) + Number((_this.maxMoney / 10000000000).toFixed(6))});
+            break;
+          case 3:
+            res.push({name: '中转仓库存', dept: name, count: Number((dept.transferWarehouseMoney / 10000).toFixed(0))});
+            res.push({name: '占总数比', dept: name, count: Number((dept.transferWarehouseMoney / dept.orgMoney / 10000 * _this.maxMoney).toFixed(0)) + Number((_this.maxMoney / 10000000000).toFixed(6))});
+            break;
+          default:
+            res.push({name: '海外仓库存', dept: name, count: Number((dept.overseaStockMoney / 10000).toFixed(0))});
+            res.push({name: '占总数比', dept: name, count: Number((dept.overseaStockMoney / dept.orgMoney / 10000 * _this.maxMoney).toFixed(0)) + Number((_this.maxMoney / 10000000000).toFixed(6))});
+            break;
+        }
       });
       return res;
     }
   },
   methods: {
-    getChartData: function() {
+    renderChart: function() {
       var _this = this;
       var chart = new F2.Chart({
         width: window.innerWidth,
@@ -84,7 +112,7 @@ export default {
           });
           tooltipItems.map(item => {
             const { name, value } = item;
-            if (map[name] && name == '可售比例') {
+            if (map[name] && name == '占总数比') {
               let s = (value + '').split('.');
               map[name].value = (s[0] / s[1] * 100).toFixed(2) + '%';
             } else if (map[name]) {

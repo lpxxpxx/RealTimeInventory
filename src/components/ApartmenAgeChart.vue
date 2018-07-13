@@ -20,9 +20,9 @@
 /* eslint-disable */
 import F2 from '@antv/f2';
 export default {
-  props: ['mainage'],
+  props: ['mainage', 'status'],
   mounted: function() {
-    this.getChartData();
+    this.renderChart();
   },
   data() {
     return {
@@ -31,6 +31,14 @@ export default {
       chart: null,
       orgAvgAge: []
     };
+  },
+  watch: {
+    status: function() {
+      if(this.status % 2 === 0) {
+        this.chart.clear();
+        this.renderChart();
+      }
+    }
   },
   computed: {
     data: function() {
@@ -53,7 +61,7 @@ export default {
     }
   },
   methods: {
-    getChartData: function() {
+    renderChart: function() {
       var _this = this;
       var chart = new F2.Chart({
         width: window.innerWidth,
@@ -95,6 +103,7 @@ export default {
 
       chart.interval().position('dept*count').color('name').adjust('stack');
       chart.render();
+      _this.chart = chart;
     }
   }
 };

@@ -2,8 +2,8 @@
   <div class="datacount">
       <div class="topbox">
           <div class="main-val">
-            <countup :end-val="Number(mainage.totalAvgAge.toFixed(0))" :duration="2" :start="type===1 ? true : false" :decimals="0"></countup>&nbsp;天
-            <p class="mv-title">当前公司总存货平均库龄</p>
+            <countup :end-val="Number(mainage.totalAvgAge.toFixed(0))" :duration="2" :decimals="0"></countup>&nbsp;天
+            <p class="mv-title">当前公司{{ moneyTypeHeader[money] }}平均库龄</p>
           </div>
       </div>
       <div class="total">
@@ -69,7 +69,7 @@
 <script>
 import { Countup, XButton, Grid, GridItem } from 'vux'
 export default {
-  props: ['mainage','type'],
+  props: ['mainage', 'money'],
   components: {
     Countup,
     XButton,
@@ -78,7 +78,8 @@ export default {
   },
   data() {
     return {
-      totalmoney: ''
+      totalmoney: '',
+      moneyTypeHeader: ['FBA', '在途', '头程', '中转仓', '海外仓']
     };
   },
   computed: {

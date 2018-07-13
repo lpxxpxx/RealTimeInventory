@@ -48,7 +48,7 @@
 import F2 from '@antv/f2';
 import { Countup, XButton, Grid, GridItem } from 'vux'
 export default {
-  props: ['mainage'],
+  props: ['mainage', 'money', 'status'],
   components: {
     Countup,
     XButton,
@@ -60,8 +60,17 @@ export default {
   },
   data() {
     return {
-
+      moneyTypeHeader: ['FBA', '在途', '头程', '中转仓', '海外仓'],
+      chart: null
     };
+  },
+  watch: {
+    status: function() {
+      if(this.status % 2 === 0) {
+        this.chart.clear();
+        this.renderChart();
+      }
+    }
   },
   computed: {
     height: function() {
@@ -121,7 +130,7 @@ export default {
         position: ['50%', '50%'],
         html: `<div style="width: 200px;height: 40px;text-align: center;">
                     <div style="font-size: 18px;color:#fff;">${Number(_this.mainage.totalAvgAge)}天</div>
-                    <div style="font-size: 12px;color:#ddd;">当前公司总存货平均库龄</div>
+                    <div style="font-size: 12px;color:#ddd;">当前公司${_this.moneyTypeHeader[_this.money]}平均库龄</div>
                 </div>`
       });
       // Step 4: 渲染图表

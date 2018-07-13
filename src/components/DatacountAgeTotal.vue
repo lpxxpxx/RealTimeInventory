@@ -2,7 +2,7 @@
   <div class="datacount">
       <div class="topbox">
           <div class="main-val">
-            <countup :end-val="Number(mainagetotal.totalAvgAge.toFixed(0))" :duration="2" :start="type===2" :decimals="0"></countup>&nbsp;天
+            <countup :end-val="Number(mainagetotal.totalAvgAge.toFixed(0))" :duration="2" :decimals="0"></countup>&nbsp;天
             <p class="mv-title">当前公司总存货平均库龄</p>
           </div>
       </div>
@@ -69,7 +69,7 @@
 <script>
 import { Countup, XButton, Grid, GridItem } from 'vux'
 export default {
-  props: ['mainagetotal','type'],
+  props: ['mainagetotal'],
   components: {
     Countup,
     XButton,

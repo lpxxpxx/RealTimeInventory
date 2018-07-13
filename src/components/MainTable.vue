@@ -1,16 +1,16 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="status>0">
     <div class="warehouse" v-if="type===0">
       <data-count :main="main" :money="money"></data-count>
-      <apartmen :main="main" :money="money" v-if="status===0"></apartmen>
+      <apartmen :main="main" :money="money"></apartmen>
     </div>
     <div class="wareage" v-if="type===1">
-      <data-count-age :mainage="mainage" v-bind:type = "type"></data-count-age>
-      <apartmen-age :mainage="mainage" v-if="status===0"></apartmen-age>
+      <data-count-age :mainage="mainage" :money="money"></data-count-age>
+      <apartmen-age :mainage="mainage"></apartmen-age>
     </div>
     <div class="wareagetotal" v-if="type===2">
-      <data-count-age-total :mainagetotal="mainagetotal" v-bind:type = "type"></data-count-age-total>
-      <apartmen-age-total :mainagetotal="mainagetotal" v-if="status===0"></apartmen-age-total>
+      <data-count-age-total :mainagetotal="mainagetotal"></data-count-age-total>
+      <apartmen-age-total :mainagetotal="mainagetotal"></apartmen-age-total>
     </div>
   </div>
 </template>
