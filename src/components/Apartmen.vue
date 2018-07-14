@@ -125,7 +125,7 @@ export default {
   },
   mounted() {
     window.addEventListener('scroll', this.scrolling);
-    this.tabOffsetTop = this.$refs.tabbox.offsetTop + 40;
+    this.tabOffsetTop = 272;
   },
   computed: {
     ware: function() {
@@ -169,7 +169,7 @@ export default {
       index >= 2 ? this.isfixed = true : this.isfixed = false
     },
     scrolling: function() {
-      this.scroll = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
+      this.scroll = document.documentElement.scrollTop || document.body.scrollTop;
       if (this.scroll > this.tabOffsetTop) {
         this.isfixed = true;
       } else {

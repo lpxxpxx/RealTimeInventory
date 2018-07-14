@@ -18,7 +18,7 @@
       <grid :show-lr-borders="false" :show-vertical-dividers="false">
         <grid-item>
           <span>当前公司总存货(元)</span>
-          <p>{{ $toThousands(chartData[0].percent + chartData[1].percent) }}</p>
+          <p>{{ $toThousands((chartData[0].percent + chartData[1].percent).toFixed(2)) }}</p>
         </grid-item>
         <grid-item>
           <span>当前公司总存货PCS(件)</span>
