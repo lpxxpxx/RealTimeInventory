@@ -122,23 +122,23 @@ export default {
       var res = [];
       switch (this.money) {
         case 0:
-          res[0] = {name: '总库存', percent: this.main.totalPcs - this.main.fbaPcs, a: 1};
+          res[0] = {name: '其他库存', percent: this.main.totalPcs - this.main.fbaPcs, a: 1};
           res[1] = {name: '可售库存', percent: this.main.fbaPcs, a: 1};
           break;
         case 1:
-          res[0] = {name: '总库存', percent: this.main.totalPcs - this.main.overseaTransferPcs, a: 1};
+          res[0] = {name: '其他库存', percent: this.main.totalPcs - this.main.overseaTransferPcs, a: 1};
           res[1] = {name: '海外在途', percent: this.main.overseaTransferPcs, a: 1};
           break;
         case 2:
-          res[0] = {name: '总库存', percent: this.main.totalPcs - this.main.headPcs, a: 1};
+          res[0] = {name: '其他库存', percent: this.main.totalPcs - this.main.headPcs, a: 1};
           res[1] = {name: '头程在途', percent: this.main.headPcs, a: 1};
           break;
         case 3:
-          res[0] = {name: '总库存', percent: this.main.totalPcs - this.main.transferWarehousePcs, a: 1};
+          res[0] = {name: '其他库存', percent: this.main.totalPcs - this.main.transferWarehousePcs, a: 1};
           res[1] = {name: '中转仓库存', percent: this.main.transferWarehousePcs, a: 1};
           break;
         default:
-          res[0] = {name: '总库存', percent: this.main.totalPcs - this.main.overseaStockPcs, a: 1};
+          res[0] = {name: '其他库存', percent: this.main.totalPcs - this.main.overseaStockPcs, a: 1};
           res[1] = {name: '海外仓', percent: this.main.overseaStockPcs, a: 1};
           break;
       }

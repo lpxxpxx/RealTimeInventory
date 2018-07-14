@@ -18,13 +18,13 @@
           <div class="it-pro">
             <x-progress :percent="Number(item.pics / maximumAmount * 100)" :show-cancel="false" class="it2"></x-progress>
           </div>
-          <p>可售库存总额：<span>{{ $toThousands(item.pics) }}<em>&nbsp;元</em></span></p>
+          <p>{{ item.name }}总额：<span>{{ $toThousands(item.pics) }}<em>&nbsp;元</em></span></p>
         </div>
         <div class="db-item">
           <div class="it-pro">
             <x-progress :percent="item.pics / item.count * 100" :show-cancel="false" class="it3"></x-progress>
           </div>
-          <p>可售库存占比：<span>{{ (item.pics / item.count * 100).toFixed(2) }}%</span></p>
+          <p>占总数比：<span>{{ (item.pics / item.count * 100).toFixed(2) }}%</span></p>
         </div>
       </div>
     </div>
