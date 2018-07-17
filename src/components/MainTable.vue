@@ -1,5 +1,5 @@
 <template>
-  <div class="container" v-if="status>0">
+  <div class="container">
     <div class="warehouse" v-if="type===0">
       <data-count :main="main" :money="money"></data-count>
       <apartmen :main="main" :money="money"></apartmen>
